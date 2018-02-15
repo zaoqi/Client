@@ -22,7 +22,7 @@ function http_build_query(data) {
 		if(r=='') {
 			r=encodeURIComponent(k)+'='+encodeURIComponent(data[k]);
 		} else {
-			r+='&'encodeURIComponent(k)+'='+encodeURIComponent(data[k]);
+			r+='&'+encodeURIComponent(k)+'='+encodeURIComponent(data[k]);
 		}
 	}
 	return r;
@@ -30,7 +30,14 @@ function http_build_query(data) {
 
 CrossOrigin.get=function(url, data, onerror, callback) {
 	var q=http_build_query(data||{});
-	var u=url.indexOf('?')==-1?url+'?'+q:url+q;
+	var u;
+	if(q=='') {
+		u=url;
+	} else if(url.indexOf('?')==-1) {
+		u=url+'?'+q;
+	} else {
+		u=url+q;
+	}
 	var req=new XMLHttpRequest();
 	req.open('GET', 'http://crossorigin.byet.duckgaga.ga/json_get.php?f='+encodeURIComponent(u), true);
 	req.onload = function() {
